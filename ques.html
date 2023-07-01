@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Item Lister</title>
+    <style>
+      /* Styling the title */
+      h1 {
+         border: 1px solid black;
+      }
+      input[type="button"] {
+         font-weight: bold; 
+         color: green; 
+      }
+      /* Styling the list items */
+      .list-group-item {
+          font-weight: bold;            
+      }
+      /* Styling the 3rd list item */
+      .list-group-item:nth-child(3) {
+          background-color: green;       
+      }
+    </style>
+  </head>
+  <body>
+        
+  <header id="main-header" class="bg-success text-white p-4 mb-3">
+    
+  <div class="container">
+      <h1 id="header-title">Item Lister</h1>
+  </div>
+  </header>
+  <div id="box">
+  <div class="container">
+    <div id="main" class="card-body">
+      <h2 class="title">Add Items</h2>
+      <form class="form-inline mb-3">
+        <input type="text" class="form-control mr-2">
+        <input type="submit" class="btn btn-dark" value="submit">
+      </form>
+      <h2 class="title">Item</h2>
+      <ul id="items" class="list-group">
+        <li class="list-group-item">Item 1</li>
+        <li class="list-group-item">Item 2</li>
+        <li class="list-group-item">Item 3</li>
+        <li class="list-group-item">Item 4</li>
+      </ul>
+    </div>
+  </div>
+</div>
+  </body>
+</html>
+    
+    

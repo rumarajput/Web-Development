@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <style>
+        /* Styling the title */
+        h1 {
+          border: 1px solid black;             /* Add a black border */
+        }
+    
+        /* Styling the "ADD ITEM" button */
+        input[type="button"] {
+          font-weight: bold;              /* Make the text bold */
+          color: green;                     /* Set the font color to green */
+        }
+        
+        /* Styling the list items */
+        .list-group-item {
+          font-weight: bold;              /* Make the text bold */
+        }
+        
+        /* Styling the 3rd list item */
+        .list-group-item:nth-child(3) {
+          background-color: green;         /* Set the background color to green */
+        }
+      </style>
+    </head>
+    <body>
+      <input type="text" name="Name" />
+      <input type="button" value="ADD ITEM" />
+      <h2 class="title">ITEM</h2>
+      <ul id="ITEM" class="list-group">
+          <li class="list-group-item">Item 1</li>
+          <li class="list-group-item">Item 2</li>
+          <li class="list-group-item">Item 3</li>
+          <li class="list-group-item">Item 4</li>
+      </ul>
+    </body>
+</html>
