@@ -1,34 +1,87 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-       form{
-        background-color: greenyellow;
-        text-align: center;
-       }
-       input{
-        font-size: 30;
-        color: green;
-        width: 100px;
-       }
-    </style>
-  </head>
-  <body>
-    <form action="a" onsubmit="onsignup(event)">
-      <lebel> Name </lebel>
-      <input type="text" name="username" required/>
-      <label> Email </label>
-      <input type="email" name="email" required/>
-      <label> password </label>
-      <input type="password" name="password" required/>
-      <button> Sign Up </button>
+<head>
+  <style>
+    form {
+      background-color: greenyellow;
+      text-align: center;
+    }
+    input {
+      font-size: 30px; /* Corrected the font size unit */
+      color: green;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <form action="a" onsubmit="onsignup(event)">
+    <label>Name</label>
+    <input type="text" name="username" required/>
+    <label>Email</label>
+    <input type="email" name="email" required/>
+    <label>Password</label>
+    <input type="password" name="password" required/>
+    <button>Sign Up</button>
+  </form>
 
-    </form>
-    <script>
-      function onsignup(event){
-        event.preventDefault();
-        console.log(event.target.username.value)
+  <!-- Display the list of contacts -->
+  <ul id="contactList"></ul>
+
+  <script>
+    function onsignup(event) {
+      event.preventDefault();
+      const username = event.target.username.value;
+      const email = event.target.email.value;
+      const password = event.target.password.value;
+
+      // Save the contact details to local storage
+      const contact = { username, email, password };
+      const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+      contacts.push(contact);
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+
+      // Update the UI to display the contact list
+      updateContactList();
+    }
+
+    function deleteContact(index) {
+      // Retrieve the contact list from local storage
+      const contacts = JSON.parse(localStorage.getItem('contacts'));
+
+      // Remove the specified contact from the array
+      contacts.splice(index, 1);
+
+      // Update the contact list in local storage
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+
+      // Update the UI to reflect the changes
+      updateContactList();
+    }
+
+    function updateContactList() {
+      const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+      const contactList = document.getElementById('contactList');
+
+      // Clear the existing contact list
+      contactList.innerHTML = '';
+
+      // Add each contact as a list item
+      for (let i = 0; i < contacts.length; i++) {
+        const contact = contacts[i];
+        const listItem = document.createElement('li');
+        listItem.textContent = contact.username + ' - ' + contact.email;
+        contactList.appendChild(listItem);
+
+        // Add delete button for each contact
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => deleteContact(i));
+        listItem.appendChild(deleteButton);
       }
-    </script>
-  </body>
+    }
+
+    // Load the contact list on page load
+    updateContactList();
+  </script>
+</body>
 </html>
