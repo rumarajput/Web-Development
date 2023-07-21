@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Expense Tracker</h1>
+        <form id="expenseForm">
+            <div class="form-group">
+                <label for="expenseName">Expense Name</label>
+                <input type="text" class="form-control" id="expenseName" required>
+            </div>
+            <div class="form-group">
+                <label for="expenseAmount">Expense Amount</label>
+                <input type="number" class="form-control" id="expenseAmount" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+
+        <div class="mt-4">
+            <h2>Expense List</h2>
+            <ul id="expenseList" class="list-group"></ul>
+        </div>
+
+        <div class="mt-4">
+            <h2>Summary</h2>
+            <p>Total Expenses: <span id="totalExpenses">0</span></p>
+        </div>
+    </div>
+
+    <!-- Link to Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Link to custom JavaScript file -->
+    <script src="scripts.js"></script>
+</body>
+<script>
+    // Check if local storage has any expenses saved, if not, initialize the expenses array
+let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+// Function to display expenses in the list
+function displayExpenses() {
+    const expenseList = document.getElementById('expenseList');
+    expenseList.innerHTML = '';
+
+    let totalExpenses = 0;
+
+    expenses.forEach((expense, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
+        listItem.innerHTML = `
+            <span>${expense.name} - $${expense.amount}</span>
+            <button type="button" class="btn btn-danger btn-sm float-right deleteBtn" data-index="${index}">Delete</button>
+        `;
+        expenseList.appendChild(listItem);
+
+        totalExpenses += expense.amount;
+    });
+
+    document.getElementById('totalExpenses').innerText = totalExpenses;
+}
+
+// Function to add an expense to the list
+function addExpense(name, amount) {
+    expenses.push({ name, amount });
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+    displayExpenses();
+}
+
+// Function to handle form submission
+function handleSubmit(event) {
+    event.preventDefault();
+    const expenseName = document.getElementById('expenseName').value;
+    const expenseAmount = parseFloat(document.getElementById('expenseAmount').value);
+
+    if (expenseName.trim() !== '' && !isNaN(expenseAmount)) {
+        addExpense(expenseName, expenseAmount);
+
+        // Reset the form fields after adding an expense
+        document.getElementById('expenseForm').reset();
+    }
+}
+
+// Function to handle expense deletion
+function handleDelete(event) {
+    if (event.target.classList.contains('deleteBtn')) {
+        const index = parseInt(event.target.dataset.index);
+        expenses.splice(index, 1);
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        displayExpenses();
+    }
+}
+
+// Attach event listeners
+document.getElementById('expenseForm').addEventListener('submit', handleSubmit);
+document.getElementById('expenseList').addEventListener('click', handleDelete);
+
+// Display expenses on initial load
+displayExpenses();
+</script>
+
+</html>

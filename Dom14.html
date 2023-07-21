@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <title>Item Lister</title>
+</head>
+<body>
+  <header id="main-header" class="bg-success text-white p-4 mb-3">
+    <div class="container">
+      <h1 id="header-title">Item Lister <span style="display:none">123</span></h1>
+    </div>
+  </header>
+  <div class="container">
+   <div id="main" class="card card-body">
+    <h2 class="title">Add Items</h2>
+    <form class="form-inline mb-3" id="item-form">
+      <input type="text" class="form-control mr-2" id="item-input">
+      <input type="text" class="form-control mr-2" id="description-input">
+      <input type="submit" class="btn btn-dark" value="Submit">
+    </form>
+    <h2 class="title">Items</h2>
+    <ul id="items" class="list-group">
+      <li class="list-group-item" data-description="Description 1">
+        <span class="item-text">Item 1</span>
+        <span class="item-description">Description 1</span>
+        <button class="btn btn-info btn-sm edit-btn">Edit</button>
+        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+      </li>
+      <li class="list-group-item" data-description="Description 2">
+        <span class="item-text">Item 2</span>
+        <span class="item-description">Description 2</span>
+        <button class="btn btn-info btn-sm edit-btn">Edit</button>
+        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+      </li>
+      <li class="list-group-item" data-description="Description 3">
+        <span class="item-text">Item 3</span>
+        <span class="item-description">Description 3</span>
+        <button class="btn btn-info btn-sm edit-btn">Edit</button>
+        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+      </li>
+      <li class="list-group-item" data-description="Description 4">
+        <span class="item-text">Item 4</span>
+        <span class="item-description">Description 4</span>
+        <button class="btn btn-info btn-sm edit-btn">Edit</button>
+        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+      </li>
+    </ul>
+   </div>
+  </div>
+
+<script>
+  // Get the input elements and the items list
+  const itemInput = document.getElementById('item-input');
+  const descriptionInput = document.getElementById('description-input');
+  const itemsList = document.getElementById('items');
+  const form = document.getElementById('item-form');
+  let editMode = false;
+  let currentItem = null;
+
+  // Add event listener to the form submit event
+  form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent form submission
+
+    const newItem = itemInput.value.trim(); // Get the entered item
+    const newDescription = descriptionInput.value.trim(); // Get the entered description
+
+    if (newItem !== '') {
+      if (editMode) {
+        updateItem(newItem, newDescription);
+      } else {
+        addItem(newItem, newDescription);
+      }
+    }
+  });
+
+  // Function to add a new item
+  function addItem(item, description) {
+    const li = document.createElement('li'); // Create a new list item
+    li.classList.add('list-group-item');
+    li.setAttribute('data-description', description);
+
+    const itemText = document.createElement('span');
+    itemText.classList.add('item-text');
+    itemText.textContent = item;
+    li.appendChild(itemText);
+
+    const itemDescription = document.createElement('span');
+    itemDescription.classList.add('item-description');
+    itemDescription.textContent = description;
+    li.appendChild(itemDescription);
+
+    const editButton = document.createElement('button');
+    editButton.classList.add('btn', 'btn-info', 'btn-sm', 'edit-btn');
+    editButton.textContent = 'Edit';
+    editButton.addEventListener('click', editItem);
+    li.appendChild(editButton);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'delete-btn');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', deleteItem);
+    li.appendChild(deleteButton);
+
+    itemsList.appendChild(li); // Add the new item to the list
+
+    itemInput.value = ''; // Clear the item input field
+    descriptionInput.value = ''; // Clear the description input field
+
+    // Store the user details in local storage
+    storeUserDetails(item, description);
+  }
+
+  // Function to store the user details in local storage
+  function storeUserDetails(item, description) {
+    let storedDetails = localStorage.getItem('userDetails');
+    if (storedDetails) {
+      storedDetails = JSON.parse(storedDetails);
+    } else {
+      storedDetails = [];
+    }
+    const userDetails = {
+      item: item,
+      description: description
+    };
+    storedDetails.push(userDetails);
+    localStorage.setItem('userDetails', JSON.stringify(storedDetails));
+  }
+
+  // Function to edit an item
+  function editItem() {
+    editMode = true;
+    const listItem = this.parentNode;
+    const itemText = listItem.querySelector('.item-text').textContent;
+    const itemDescription = listItem.querySelector('.item-description').textContent;
+    itemInput.value = itemText;
+    descriptionInput.value = itemDescription;
+    currentItem = listItem;
+  }
+
+  // Function to update an item
+  function updateItem(newItem, newDescription) {
+    currentItem.querySelector('.item-text').textContent = newItem;
+    currentItem.querySelector('.item-description').textContent = newDescription;
+    currentItem = null;
+    editMode = false;
+
+    // Update the item details in local storage
+    updateItemInStorage(newItem, newDescription);
+    itemInput.value = ''; // Clear the item input field
+    descriptionInput.value = ''; // Clear the description input field
+  }
+
+  // Function to delete an item
+  function deleteItem() {
+    const listItem = this.parentNode; // Get the parent list item
+    const description = listItem.getAttribute('data-description'); // Get the description of the item
+
+    // Remove the item from the UI
+    listItem.remove();
+
+    // Remove the item from local storage
+    removeItemFromStorage(description);
+  }
+  </script>
+</body>
+</html>

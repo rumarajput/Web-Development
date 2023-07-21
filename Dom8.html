@@ -29,6 +29,36 @@
     </ul>
    </div>
   </div>
+<script>
+  // Create a new li element
+const newLi = document.createElement("li");
+newLi.textContent = "New Item";
 
+// Create the delete button
+const deleteButton = document.createElement("button");
+deleteButton.textContent = "Delete";
+deleteButton.classList.add("btn", "btn-danger", "delete-btn");
+
+// Create the edit button
+const editButton = document.createElement("button");
+editButton.textContent = "Edit";
+editButton.classList.add("btn", "btn-primary", "edit-btn");
+
+// Append the delete and edit buttons to the new li element
+newLi.appendChild(deleteButton);
+newLi.appendChild(editButton);
+
+// Append the new li element to the ul with the ID "items"
+const itemsList = document.getElementById("items");
+itemsList.appendChild(newLi);
+
+// Function to handle the deletion of the li element
+function deleteListItem() {
+  itemsList.removeChild(newLi);
+}
+
+// Add event listener to the delete button
+deleteButton.addEventListener("click", deleteListItem);
+</script>
 </body>
 </html>

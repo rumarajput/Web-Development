@@ -29,6 +29,25 @@
     </ul>
    </div>
   </div>
+<script>
+    // Create a new li element
+const newLi = document.createElement("li");
+newLi.textContent = "New Item";
+
+// Append the new li element to the ul with the ID "items"
+const itemsList = document.getElementById("items");
+itemsList.appendChild(newLi);
+
+// Edit the new li element using getElementsByClassName()
+const itemsWithClass = document.getElementsByClassName("list-group-item");
+const lastItemWithClass = itemsWithClass[itemsWithClass.length - 1];
+lastItemWithClass.style.backgroundColor = "blue";
+
+// Edit the new li element using getElementsByTagName()
+const allListItems = document.getElementsByTagName("li");
+const lastListItem = allListItems[allListItems.length - 1];
+lastListItem.style.fontWeight = "bold";
+</script>
 
 </body>
 </html>

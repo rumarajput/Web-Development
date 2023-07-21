@@ -30,5 +30,18 @@
    </div>
   </div>
 
+  <script>
+    // Add "Hello" before "Item Lister"
+    var mainHeader = document.getElementById("header-title");
+    var parentElement = mainHeader.parentElement;
+    var textNode = document.createTextNode("Hello");
+    parentElement.insertBefore(textNode, mainHeader);
+
+    // Add "Hello" before "Item 1"
+    var itemList = document.getElementById("items");
+    var firstElementChild = itemList.firstElementChild;
+    var textNode2 = document.createTextNode("Hello");
+    itemList.insertBefore(textNode2, firstElementChild);
+  </script>
 </body>
 </html>
