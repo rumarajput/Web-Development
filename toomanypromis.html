@@ -1,0 +1,55 @@
+
+
+function createPost(post) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log(`Post created: ${post}`);
+      resolve(post);
+    }, 1000);
+  });
+}
+
+// Simulating the updateLastUserActivityTime function with a promise that resolves in 1 second
+function updateLastUserActivityTime(user) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const lastActivityTime = new Date().toLocaleTimeString();
+      console.log(`Last activity time for ${user}: ${lastActivityTime}`);
+      resolve(lastActivityTime);
+    }, 1000);
+  });
+}
+
+// Simulating the deletion promise with a promise that resolves in 1 second
+function deletePost(post) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log(`Post deleted: ${post}`);
+      resolve(post);
+    }, 1000);
+  });
+}
+
+// Function to create a new post and update user's activity time
+async function createPostAndUpdateActivity(user, post) {
+  try {
+    const [createdPost, lastActivityTime] = await Promise.all([
+      createPost(post),
+      updateLastUserActivityTime(user),
+    ]);
+
+    console.log(`Posts created: ${createdPost}`);
+    console.log(`Last activity time: ${lastActivityTime}`);
+
+    const deletedPost = await deletePost(createdPost);
+    console.log(`Post deleted: ${deletedPost}`);
+
+    // Log the new set of posts after deletion
+    console.log(`New set of posts: ...`);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Call the function to create a new post and update user's activity time
+createPostAndUpdateActivity('User123', 'Hello, world!');
